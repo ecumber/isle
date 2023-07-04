@@ -174,9 +174,8 @@ void LegoInputManager::ReleaseDX() {
     m_directinputDeviceInterface->Release();
     m_directinputDeviceInterface = NULL;
   }
-  IDirectInputA* idinputa = m_directinputInterface;
-  if (idinputa != NULL) {
-    idinputa->Release();
+  if (m_directinputInterface != NULL) {
+    m_directinputInterface->Release();
     m_directinputInterface = NULL;
   }
   return;
