@@ -29,6 +29,7 @@ public:
   int GetJoystickState(unsigned int* something_x, unsigned int* something_y, DWORD* buttons_state, unsigned int* pov_position);
   void CreateAndAcquireKeyboard(HWND hwnd);
   int GetJoystickId();
+  void ReleaseDX();
 
   //virtual MxLong Tickle() override; // vtable+0x8
   MxCriticalSection m_criticalsection;                // 0x40

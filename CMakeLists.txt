@@ -212,7 +212,7 @@ if (ISLE_BUILD_APP)
   endif()
 
   # Link DSOUND, WINMM, and LEGO1
-  target_link_libraries(isle PRIVATE dsound winmm lego1 "${CMAKE_SOURCE_DIR}/dxsdk/lib/dinput.lib" "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dxguid.lib")
+  target_link_libraries(isle PRIVATE dsound winmm lego1 "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dinput.lib" "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dxguid.lib")
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)

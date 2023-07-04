@@ -167,3 +167,17 @@ int LegoInputManager::GetJoystickId()
   }
   return -1;
 }
+
+void LegoInputManager::ReleaseDX() { 
+  if (m_directinputDeviceInterface != NULL) {
+    m_directinputDeviceInterface->Unacquire();
+    m_directinputDeviceInterface->Release();
+    m_directinputDeviceInterface = NULL;
+  }
+  IDirectInputA* idinputa = m_directinputInterface;
+  if (idinputa != NULL) {
+    idinputa->Release();
+    m_directinputInterface = NULL;
+  }
+  return;
+}
