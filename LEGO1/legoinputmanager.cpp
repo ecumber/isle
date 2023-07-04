@@ -5,7 +5,7 @@
 
 //DECOMP_SIZE_ASSERT(LegoInputManager, 0x338); // 0x10059085
 
-// OFFSET: LEGO1 0x1005b790 STUB
+// OFFSET: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
   m_unknown5C = 0;
@@ -64,7 +64,6 @@ void LegoInputManager::UnRegister(MxCore *)
 //  return 0;
 //}
 
-// OFFSET: LEGO1 0x1005cfb0
 void LegoInputManager::SetTimer()
 {
   LegoOmni* omni = LegoOmni::GetInstance();
@@ -72,7 +71,6 @@ void LegoInputManager::SetTimer()
   m_timer = timer;
 }
 
-// OFFSET: LEGO1 0x1005cfd0
 void LegoInputManager::KillTimer()
 {
   if (m_timer != 0)
@@ -162,8 +160,7 @@ int LegoInputManager::GetJoystickId()
     {
       joyinfoex.dwSize = 0x34;
       joyinfoex.dwFlags = 0xFF;
-      MMRESULT result = joyGetPosEx(joyid, &joyinfoex);
-      if (result == JOYERR_NOERROR && (joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR))
+      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR )
       {
         m_joyid = joyid;
         return 0;
@@ -173,8 +170,7 @@ int LegoInputManager::GetJoystickId()
     {
       joyinfoex.dwSize = 0x34;
       joyinfoex.dwFlags = 0xFF;
-      MMRESULT result = joyGetPosEx(joyid, &joyinfoex);
-      if (result == JOYERR_NOERROR && (joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR))
+      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194 == JOYERR_NOERROR))
       {
         m_joyid = joyid;
         return 0;
@@ -184,13 +180,16 @@ int LegoInputManager::GetJoystickId()
   return -1;
 }
 
-void LegoInputManager::ReleaseDX() { 
-  if (m_directinputDeviceInterface != NULL) {
+void LegoInputManager::ReleaseDX()
+{
+  if (m_directinputDeviceInterface != NULL)
+  {
     m_directinputDeviceInterface->Unacquire();
     m_directinputDeviceInterface->Release();
     m_directinputDeviceInterface = NULL;
   }
-  if (m_directinputInterface != NULL) {
+  if (m_directinputInterface != NULL)
+  {
     m_directinputInterface->Release();
     m_directinputInterface = NULL;
   }

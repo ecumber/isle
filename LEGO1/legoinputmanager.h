@@ -3,8 +3,8 @@
 
 #include "decomp.h"
 #include "mxpresenter.h"
+#include "legoomni.h"
 #include "legocontrolmanager.h"
-
 #include <dinput.h>
 
 enum NotificationId
