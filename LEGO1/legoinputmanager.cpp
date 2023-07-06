@@ -11,14 +11,14 @@ LegoInputManager::LegoInputManager()
   m_unknown5C = 0;
   m_unknown64 = NULL;
   m_unknown60 = NULL;
-  m_unknown68 = 0;
+  m_unknown_classptr68 = NULL;
   m_unknown80 = 0;
   m_timer = 0;
   m_unknown6C = 0;
   m_unknown70 = 0;
   m_controlManager = NULL;
-  m_unknown81 = 0;
-  m_unknown88 = 0;
+  m_bool81 = FALSE;
+  m_bool88 = FALSE;
   m_directinputInterface = NULL;
   m_directinputDeviceInterface = NULL;
   m_unused94 = 0;
@@ -26,7 +26,7 @@ LegoInputManager::LegoInputManager()
   m_joyid = (UINT)-1;
   m_unknown19C = (UINT)-1;
   m_joystickIndex = 0;
-  m_useJoystick = false;
+  m_useJoystick = FALSE;
   m_unknown336 = 0;
   m_unknown74 = 0x19;
   m_timeout = 1000;
