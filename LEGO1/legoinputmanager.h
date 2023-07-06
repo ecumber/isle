@@ -27,9 +27,10 @@ public:
   __declspec(dllexport) void QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5);
   __declspec(dllexport) void Register(MxCore *);
   __declspec(dllexport) void UnRegister(MxCore *);
-  int GetJoystickState(unsigned int* something_x, unsigned int* something_y, DWORD* buttons_state, unsigned int* pov_position);
+  void Destroy();
+  MxS32 GetJoystickState(unsigned int* something_x, unsigned int* something_y, DWORD* buttons_state, unsigned int* pov_position);
   void CreateAndAcquireKeyboard(HWND hwnd);
-  int GetJoystickId();
+  MxS32 GetJoystickId();
   void ReleaseDX();
   void SetTimer();
   void KillTimer();

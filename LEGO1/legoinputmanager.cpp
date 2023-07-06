@@ -64,6 +64,15 @@ void LegoInputManager::UnRegister(MxCore *)
 //  return 0;
 //}
 
+void LegoInputManager::Destroy() 
+{
+  ReleaseDX();
+
+  if (m_unknown_classptr68 != NULL) delete[] m_unknown_classptr68;
+  if (m_controlManager != NULL) delete[] m_controlManager;
+  return;
+}
+
 void LegoInputManager::SetTimer()
 {
   LegoOmni* omni = LegoOmni::GetInstance();
@@ -101,7 +110,7 @@ void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
   return;
 }
 
-int LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int* joystick_y, DWORD* buttons_state, unsigned int* pov_position)
+MxS32 LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int* joystick_y, DWORD* buttons_state, unsigned int* pov_position)
 {
   if ((m_joystickIndex != JOYSTICKID1) && (m_joyid < 0) && (GetJoystickId() == -1))
   {
@@ -150,7 +159,7 @@ int LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int* j
 // set dwSize and dwFlags result in incorrect offsets in the JOYINFOEX struct
 
 //  OFFSET: LEGO1 0x1005c240
-int LegoInputManager::GetJoystickId()
+MxS32 LegoInputManager::GetJoystickId()
 {
   JOYINFOEX joyinfoex;
   if (m_joystickIndex != JOYSTICKID1)
