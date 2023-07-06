@@ -1,6 +1,7 @@
 #include "legoinputmanager.h"
 
 #include "decomp.h"
+#include "legoomni.h"
 
 //DECOMP_SIZE_ASSERT(LegoInputManager, 0x338); // 0x10059085
 
@@ -15,17 +16,18 @@ LegoInputManager::LegoInputManager()
   m_timer = 0;
   m_unknown6C = 0;
   m_unknown70 = 0;
-  m_unknown84 = NULL;
+  m_controlManager = NULL;
   m_unknown81 = 0;
   m_unknown88 = 0;
   m_directinputInterface = NULL;
   m_directinputDeviceInterface = NULL;
-  m_unknown94 = 0;
+  m_unused94 = 0;
   m_unknown195 = 0;
   m_joyid = (UINT)-1;
   m_unknown19C = (UINT)-1;
   m_joystickIndex = 0;
-  m_useJoystick = 0;
+  m_useJoystick = false;
+  m_unknown336 = 0;
   m_unknown74 = 0x19;
   m_timeout = 1000;
 }
@@ -62,6 +64,27 @@ void LegoInputManager::UnRegister(MxCore *)
 //  return 0;
 //}
 
+<<<<<<< Updated upstream
+=======
+// OFFSET: LEGO1 0x1005cfb0
+void LegoInputManager::SetTimer()
+{
+  LegoOmni* omni = LegoOmni::GetInstance();
+  UINT timer = ::SetTimer(*omni->GetWindowHandle(), 1, m_timeout, NULL);
+  m_timer = timer;
+}
+
+// OFFSET: LEGO1 0x1005cfd0
+void LegoInputManager::KillTimer()
+{
+  if (m_timer != 0)
+  {
+    LegoOmni* omni = LegoOmni::GetInstance();
+    ::KillTimer(*omni->GetWindowHandle(), m_timer);
+  }
+}
+
+>>>>>>> Stashed changes
 // this function currently does not match 100% due to some member variables
 // being at the wrong offsets, but the functionality is the same
 
@@ -85,49 +108,45 @@ void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
 
 int LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int* joystick_y, DWORD* buttons_state, unsigned int* pov_position)
 {
-  if (m_joystickIndex != JOYSTICKID1)
+  if ((m_joystickIndex != JOYSTICKID1) && (m_joyid < 0) && (GetJoystickId() == -1))
   {
-    if (m_joyid < 0)
-    {
-      int result = GetJoystickId();
-      if (result == -1)
-      {
-        m_joystickIndex = 0;
-        return -1;
-      }
-    }
+    m_joystickIndex = 0;
+    return -1;
+  }
 
-    JOYINFOEX joyinfoex;
-    joyinfoex.dwSize = 0x34;
-    joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNBUTTONS;
-    UINT capabilities = m_joyCapsA.wCaps;
-    if ((capabilities & JOYCAPS_HASPOV) != 0) 
+  JOYINFOEX joyinfoex;
+  joyinfoex.dwSize = 0x34;
+  joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNBUTTONS;
+  UINT capabilities = m_joyCapsA.wCaps;
+  if ((capabilities & JOYCAPS_HASPOV) != 0)
+  {
+    joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS;
+    if ((capabilities & JOYCAPS_POVCTS) != 0)
     {
-      joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS;
-      if ((capabilities & JOYCAPS_POVCTS) != 0)
-      {
-          joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS | JOY_RETURNPOVCTS;
-      }
+      joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS | JOY_RETURNPOVCTS;
     }
-    MMRESULT mmresult = joyGetPosEx(m_joyid, &joyinfoex);
-    if (mmresult == MMSYSERR_NOERROR) {
-      *buttons_state = joyinfoex.dwButtons;
-      UINT xmin = m_joyCapsA.wXmin;
-      UINT ymax = m_joyCapsA.wYmax;
-      UINT ymin = m_joyCapsA.wYmin;
-      *joystick_x = ((joyinfoex.dwXpos - xmin) * 100) / (m_joyCapsA.wXmax - xmin);
-      *joystick_y = ((joyinfoex.dwYpos - m_joyCapsA.wYmin) * 100) / (ymax - ymin);
-      if (m_joyCapsA.wCaps & (JOYCAPS_POV4DIR | JOYCAPS_POVCTS) == 0) {
-        *pov_position = (UINT)-1;
-        return 0;
-      }
-      if (joyinfoex.dwPOV == -1) {
-        *pov_position =  (UINT)-1;
-        return 0;
-      }
-      *pov_position = joyinfoex.dwPOV / 100;
+  }
+  MMRESULT mmresult = joyGetPosEx(m_joyid, &joyinfoex);
+  if (mmresult == MMSYSERR_NOERROR)
+  {
+    *buttons_state = joyinfoex.dwButtons;
+    UINT xmin = m_joyCapsA.wXmin;
+    UINT ymax = m_joyCapsA.wYmax;
+    UINT ymin = m_joyCapsA.wYmin;
+    *joystick_x = ((joyinfoex.dwXpos - xmin) * 100) / (m_joyCapsA.wXmax - xmin);
+    *joystick_y = ((joyinfoex.dwYpos - m_joyCapsA.wYmin) * 100) / (ymax - ymin);
+    if ((m_joyCapsA.wCaps & (JOYCAPS_POV4DIR | JOYCAPS_POVCTS)) == 0)
+    {
+      *pov_position = (UINT)-1;
       return 0;
     }
+    if (joyinfoex.dwPOV == JOY_POVCENTERED)
+    {
+      *pov_position = (UINT)-1;
+      return 0;
+    }
+    *pov_position = joyinfoex.dwPOV / 100;
+    return 0;
   }
   return -1;
 }

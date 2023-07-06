@@ -3,6 +3,11 @@
 
 #include "decomp.h"
 #include "mxpresenter.h"
+<<<<<<< Updated upstream
+=======
+#include "legocontrolmanager.h"
+
+>>>>>>> Stashed changes
 #include <dinput.h>
 
 enum NotificationId
@@ -46,12 +51,12 @@ public:
   char m_unknown81;                                   // 0x81
   char m_unknown82;                                   // 0x82
   char m_unknown83;                                   // 0x83
-  int* m_unknown84;                                   // 0x84
+  LegoControlManager* m_controlManager;               // 0x84
   char m_unknown88;                                   // 0x88
   char m_unknown89[3];                                // 0x89
   IDirectInputA* m_directinputInterface;              // 0x8C
   IDirectInputDeviceA* m_directinputDeviceInterface;  // 0x90
-  char m_unknown94;                                   // 0x94
+  char m_unused94;                                    // 0x94
   char m_unknown95[3];                                // 0x95
   void* m_unknown98;                                  // 0x98
   char m_unknown9C[0xF8];                             // 0x9C
