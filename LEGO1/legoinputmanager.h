@@ -3,11 +3,8 @@
 
 #include "decomp.h"
 #include "mxpresenter.h"
-<<<<<<< Updated upstream
-=======
 #include "legocontrolmanager.h"
 
->>>>>>> Stashed changes
 #include <dinput.h>
 
 enum NotificationId
@@ -35,6 +32,8 @@ public:
   void CreateAndAcquireKeyboard(HWND hwnd);
   int GetJoystickId();
   void ReleaseDX();
+  void SetTimer();
+  void KillTimer();
 
   //virtual MxLong Tickle() override; // vtable+0x8
   MxCriticalSection m_criticalsection;                // 0x40

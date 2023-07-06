@@ -64,8 +64,6 @@ void LegoInputManager::UnRegister(MxCore *)
 //  return 0;
 //}
 
-<<<<<<< Updated upstream
-=======
 // OFFSET: LEGO1 0x1005cfb0
 void LegoInputManager::SetTimer()
 {
@@ -84,7 +82,6 @@ void LegoInputManager::KillTimer()
   }
 }
 
->>>>>>> Stashed changes
 // this function currently does not match 100% due to some member variables
 // being at the wrong offsets, but the functionality is the same
 
