@@ -121,7 +121,7 @@ MxS32 LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int*
   JOYINFOEX joyinfoex;
   joyinfoex.dwSize = 0x34;
   joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNBUTTONS;
-  UINT capabilities = m_joyCapsA.wCaps;
+  MxU32 capabilities = m_joyCapsA.wCaps;
   if ((capabilities & JOYCAPS_HASPOV) != 0)
   {
     joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS;
@@ -134,19 +134,19 @@ MxS32 LegoInputManager::GetJoystickState(unsigned int* joystick_x, unsigned int*
   if (mmresult == MMSYSERR_NOERROR)
   {
     *buttons_state = joyinfoex.dwButtons;
-    UINT xmin = m_joyCapsA.wXmin;
-    UINT ymax = m_joyCapsA.wYmax;
-    UINT ymin = m_joyCapsA.wYmin;
+    MxU32 xmin = m_joyCapsA.wXmin;
+    MxU32 ymax = m_joyCapsA.wYmax;
+    MxU32 ymin = m_joyCapsA.wYmin;
     *joystick_x = ((joyinfoex.dwXpos - xmin) * 100) / (m_joyCapsA.wXmax - xmin);
     *joystick_y = ((joyinfoex.dwYpos - m_joyCapsA.wYmin) * 100) / (ymax - ymin);
     if ((m_joyCapsA.wCaps & (JOYCAPS_POV4DIR | JOYCAPS_POVCTS)) == 0)
     {
-      *pov_position = (UINT)-1;
+      *pov_position = (MxU32)-1;
       return 0;
     }
     if (joyinfoex.dwPOV == JOY_POVCENTERED)
     {
-      *pov_position = (UINT)-1;
+      *pov_position = (MxU32)-1;
       return 0;
     }
     *pov_position = joyinfoex.dwPOV / 100;
@@ -164,22 +164,22 @@ MxS32 LegoInputManager::GetJoystickId()
   JOYINFOEX joyinfoex;
   if (m_joystickIndex != JOYSTICKID1)
   {
-    UINT joyid = m_unknown19C;
-    if (-1 < (int)joyid)
+    MxS32 joyid = m_unknown19C;
+    if (-1 < joyid)
     {
       joyinfoex.dwSize = 0x34;
       joyinfoex.dwFlags = 0xFF;
-      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR )
+      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR)
       {
         m_joyid = joyid;
         return 0;
       }
     }
-    for (joyid = JOYSTICKID1; joyid < 0x10; joyid++)
+    for (joyid = JOYSTICKID1; joyid < 16; joyid++)
     {
       joyinfoex.dwSize = 0x34;
       joyinfoex.dwFlags = 0xFF;
-      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194 == JOYERR_NOERROR))
+      if (joyGetPosEx(joyid, &joyinfoex) == JOYERR_NOERROR && joyGetDevCapsA(joyid, &m_joyCapsA, 0x194) == JOYERR_NOERROR)
       {
         m_joyid = joyid;
         return 0;
